@@ -1,4 +1,5 @@
 local ffi = require("ffi")
+local io = require("io")
 
 do
    local i42 = 42
@@ -19,4 +20,24 @@ do
    local handle = ffi.new_handle(t)
    local t_back = ffi.from_handle(handle)
    assert(t == t_back)
+end
+
+do
+   local function test_conversion(a1, a2)
+      local t = { a = a1, b = a2 }
+      local handle = ffi.new_handle(t)
+      local t_back = ffi.from_handle(handle)
+      assert(t == t_back)
+      assert(t_back.a == a1)
+      assert(t_back.b == a2)
+   end
+
+   -- local status = jit.compile(test_conversion)
+   -- if (status ~= nil) then
+   --    error("Failed to compiled test function")
+   -- end
+   jit.opt.start("hotloop=1")
+   for i = 1, 100 do
+      test_conversion(i, i + 1)
+   end
 end

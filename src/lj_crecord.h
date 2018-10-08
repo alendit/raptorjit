@@ -16,6 +16,8 @@ LJ_FUNC void recff_cdata_arith(jit_State *J, RecordFFData *rd);
 LJ_FUNC void recff_clib_index(jit_State *J, RecordFFData *rd);
 LJ_FUNC void recff_ffi_new(jit_State *J, RecordFFData *rd);
 LJ_FUNC void recff_ffi_errno(jit_State *J, RecordFFData *rd);
+LJ_FUNC void recff_ffi_new_handle(jit_State *J, RecordFFData *rd);
+LJ_FUNC void recff_ffi_from_handle(jit_State *J, RecordFFData *rd);
 LJ_FUNC void recff_ffi_string(jit_State *J, RecordFFData *rd);
 LJ_FUNC void recff_ffi_copy(jit_State *J, RecordFFData *rd);
 LJ_FUNC void recff_ffi_fill(jit_State *J, RecordFFData *rd);

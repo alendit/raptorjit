@@ -674,20 +674,22 @@ LJLIB_CF(ffi_errno)	LJLIB_REC(.)
   return 1;
 }
 
-LJLIB_CF(ffi_new_handle)
+LJLIB_CF(ffi_new_handle) LJLIB_REC(.)
 {
+  CTState *cts = ctype_cts(L);
   TValue *o = lj_lib_checkany(L, 1);
-  // L->top = o + 1;
-  setint64V(o, *(int64_t*)(o));
+  GCcdata *cd = lj_cdata_new(cts, CTID_UINT64, CTSIZE_PTR);
+  *(uint64_t*)cdataptr(cd) = *(uint64_t*)(o);
+  setcdataV(L, o, cd);
   return 1;
 }
 
-LJLIB_CF(ffi_from_handle)
+LJLIB_CF(ffi_from_handle) LJLIB_REC(.)
 {
   CTState *cts = ctype_cts(L);
   TValue *o = lj_lib_checkany(L, 1);
   TValue unwrapped;
-  lj_cconv_ct_tv(cts, ctype_get(cts, CTID_UINT64), (uint8_t*)&unwrapped, o,
+  lj_cconv_ct_tv(cts, ctype_get(cts, CTID_UINT_PSZ), (uint8_t*)&unwrapped, o,
       CCF_ARG(1));
   *o = unwrapped;
   return 1;

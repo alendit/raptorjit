@@ -1539,6 +1539,27 @@ void recff_ffi_errno(jit_State *J, RecordFFData *rd)
   J->base[0] = lj_ir_call(J, IRCALL_lj_vm_errno);
 }
 
+void recff_ffi_new_handle(jit_State *J, RecordFFData *rd)
+{
+  // CTState *cts = ctype_ctsG(J2G(J));
+  uint64_t val = *(uint64_t*)(&rd->argv[0]);
+
+  J->base[0] = emitir(IRTG(IR_CNEWI, IRT_CDATA), lj_ir_kint(J, CTID_CTYPEID),
+    lj_ir_kint(J, val));
+}
+
+void recff_ffi_from_handle(jit_State *J, RecordFFData *rd)
+{
+  CTState *cts = ctype_ctsG(J2G(J));
+  GCcdata* cdata = cdataV(&rd->argv[0]);
+  TRef tr = J->base[0];
+  TValue t_val = *(TValue*)cdataptr(cdata);
+
+  if (tr) {
+    J->base[0] = crec_ct_tv(J, ctype_get(cts, CTID_UINT64), 0, tr, &t_val);
+  }
+}
+
 void recff_ffi_string(jit_State *J, RecordFFData *rd)
 {
   CTState *cts = ctype_ctsG(J2G(J));

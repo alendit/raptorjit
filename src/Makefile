@@ -36,7 +36,7 @@ CCOPT= -O2 -fomit-frame-pointer
 #
 CCDEBUG=
 # Uncomment the next line to generate debug information:
-#CCDEBUG= -g
+CCDEBUG= -g
 #
 CCWARN= -Wall
 # Uncomment the next line to enable more warnings:
@@ -73,7 +73,7 @@ XCFLAGS=
 #XCFLAGS+= -DLUAJIT_NUMMODE=2
 #
 # Enable GC64 mode for x64.
-#XCFLAGS+= -DLUAJIT_ENABLE_GC64
+XCFLAGS+= -DLUAJIT_ENABLE_GC64
 #
 ##############################################################################
 

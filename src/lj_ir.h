@@ -136,6 +136,8 @@
   _(TOBIT,	N , ref, ref) \
   _(TOSTR,	N , ref, lit) \
   _(STRTO,	N , ref, ___) \
+  _(TOHANDLE, N, ref, lit) \
+  _(FROMHANDLE, N, ref, lit) \
   \
   /* Calls. */ \
   _(CALLN,	N , ref, lit) \

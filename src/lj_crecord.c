@@ -1541,17 +1541,22 @@ void recff_ffi_errno(jit_State *J, RecordFFData *rd)
 
 void recff_ffi_new_handle(jit_State *J, RecordFFData *rd)
 {
-  J->base[0] = emitir(IRT(IR_CNEWI, IRT_CDATA), lj_ir_kint(J, CTID_UINT64),
-    lj_ir_kint(J, (uint64_t)J->base[0]));
+  IRType t = itype2irt(&rd->argv[0]);
+
+  TRef tr = emitir(IRT(IR_TOHANDLE, CTID_UINT64), J->base[0], lj_ir_kint(J, t));
+  TRef cd = emitir(IRTG(IR_CNEW, IRT_CDATA),	lj_ir_kint(J, 64), TREF_NIL);
+  TRef ptr = emitir(IRT(IR_ADD, IRT_PTR), cd, lj_ir_kintp(J, sizeof(GCcdata)));
+  emitir(IRT(IR_XSTORE, IRT_PTR), ptr, tr);
+  J->base[0] = ptr;
 }
 
 void recff_ffi_from_handle(jit_State *J, RecordFFData *rd)
 {
-  GCcdata *cd = argv2cdata(J, J->base[0], &rd->argv[0]);
-  TRef tr = *(TRef*)(cdataptr(cd));
-  if (tr) {
-    J->base[0] = tr;
-  }
+  TRef tr;
+  tr = emitir(IRT(IR_ADD, IRT_PTR), J->base[0], lj_ir_kintp(J, sizeof(GCcdata)));
+  tr = emitir(IRT(IR_XLOAD, IRT_TAB), tr, 0);
+  emitir(IRT(IR_XBAR, IRT_NIL), 0, 0);
+  J->base[0] = tr;
 }
 
 void recff_ffi_string(jit_State *J, RecordFFData *rd)

@@ -689,9 +689,10 @@ LJLIB_CF(ffi_from_handle) LJLIB_REC(.)
   CTState *cts = ctype_cts(L);
   TValue *o = lj_lib_checkany(L, 1);
   TValue unwrapped;
-  lj_cconv_ct_tv(cts, ctype_get(cts, CTID_UINT_PSZ), (uint8_t*)&unwrapped, o,
+  lj_cconv_ct_tv(cts, ctype_get(cts, CTID_UINT64), (uint8_t*)&unwrapped, o,
       CCF_ARG(1));
   *o = unwrapped;
+
   return 1;
 }
 

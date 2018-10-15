@@ -2247,7 +2247,7 @@ LJFOLDF(fwd_sload)
   }
 }
 
-/* Only fold for KKPTR. The pointer _and_ the contents must be const. */
+// /* Only fold for KKPTR. The pointer _and_ the contents must be const. */
 LJFOLD(XLOAD KKPTR any)
 LJFOLDF(xload_kptr)
 {

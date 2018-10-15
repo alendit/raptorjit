@@ -1517,7 +1517,6 @@ static void asm_ir(ASMState *as, IRIns *ir)
   case IR_TOSTR: asm_tostr(as, ir); break;
   case IR_STRTO: asm_strto(as, ir); break;
   case IR_TOHANDLE: asm_tohandle(as, ir); break;
-  case IR_FROMHANDLE: asm_fromhandle(as, ir); break;
 
   /* Calls. */
   case IR_CALLA:

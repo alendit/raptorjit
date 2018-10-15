@@ -811,15 +811,9 @@ static void asm_tohandle(ASMState *as, IRIns *ir)
   as->mrm.idx = RID_NONE;
   as->mrm.ofs = 0;
   as->mrm.scale = XM_SCALE1;
-  emit_mrm(as, XO_MOV, dest | REX_GC64, RID_MRM);
+  emit_mrm(as, XO_MOV, dest, RID_MRM);
   asm_tvptr(as, dest, ir->op1);
-}
 
-// 0x000055d36884fab8 -- call to maybe
-static void asm_fromhandle(ASMState *as, IRIns *ir) {
-  // Reg dest = ra_dest(as, ir, RSET_GPR) | REX_GC64;
-  // Reg src = ra_alloc1(as, ir->op1, rset_exclude(RSET_GPR, dest));
-  // emit_rmro(as, XO_MOV, dest, src, sizeof(GCcdata));
 }
 
 /* -- Memory references --------------------------------------------------- */

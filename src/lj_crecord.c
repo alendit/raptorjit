@@ -1542,8 +1542,8 @@ void recff_ffi_errno(jit_State *J, RecordFFData *rd)
 void recff_ffi_new_handle(jit_State *J, RecordFFData *rd)
 {
   IRType t = itype2irt(&rd->argv[0]);
-
   TRef tr = emitir(IRT(IR_TOHANDLE, CTID_UINT64), J->base[0], lj_ir_kint(J, t));
+
   J->base[0] = emitir(IRTG(IR_CNEWI, IRT_CDATA), lj_ir_kint(J, CTID_UINT64), tr);
 }
 

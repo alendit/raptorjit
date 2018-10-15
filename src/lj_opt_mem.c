@@ -738,6 +738,23 @@ TRef lj_opt_fwd_xload(jit_State *J)
   if ((fins->op2 & IRXLOAD_VOLATILE))
     goto doemit;
 
+  /* Search for conflicting CNEWI */
+  ref = J->chain[IR_CNEWI];
+  if (ref < xref) {
+
+    IRIns *cnewi = IR(ref);
+    IRIns* cdata1 = IR(xr->op1);
+    IRIns* cdata2 = IR(cnewi->op2);
+    uint8_t c1 = xr->o == IR_ADD,
+      c2 = ir_k64(IR(xr->op2))->u64 == 0x10,
+      c3 = cdata1 == cnewi,
+      c4 = cdata2->o == IR_CALLXS;
+
+    if ( c1 && c2 && c3 && c4) {
+        return cnewi->op2;
+      }
+    }
+
   /* Search for conflicting stores. */
   ref = J->chain[IR_XSTORE];
 retry:

@@ -1543,7 +1543,6 @@ void recff_ffi_new_handle(jit_State *J, RecordFFData *rd)
 {
   IRType t = itype2irt(&rd->argv[0]);
   TRef tr = emitir(IRT(IR_TOHANDLE, CTID_UINT64), J->base[0], lj_ir_kint(J, t));
-
   J->base[0] = emitir(IRTG(IR_CNEWI, IRT_CDATA), lj_ir_kint(J, CTID_UINT64), tr);
 }
 
@@ -1552,7 +1551,7 @@ void recff_ffi_from_handle(jit_State *J, RecordFFData *rd)
   TRef tr;
   tr = emitir(IRT(IR_ADD, IRT_PTR), J->base[0], lj_ir_kintp(J, sizeof(GCcdata)));
   tr = emitir(IRT(IR_XLOAD, IRT_TAB), tr, 0);
-  tr = emitir(IRT(IR_BAND, IRT_PTR), tr, lj_ir_kintp(J, (1LL << 49) - 1));
+  tr = emitir(IRT(IR_BAND, IRT_TAB), tr, lj_ir_kintp(J, (1LL << 49) - 1));
   J->base[0] = tr;
 }
 

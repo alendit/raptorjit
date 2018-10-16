@@ -34,7 +34,7 @@ CCOPT=-O2 -fomit-frame-pointer
 # Note: it's no longer recommended to use -O3 with GCC 4.x.
 # The I-Cache bloat usually outweighs the benefits from aggressive inlining.
 #
-CCDEBUG=
+CCDEBUG=-g
 # Uncomment the next line to generate debug information:
 #CCDEBUG= -g
 #

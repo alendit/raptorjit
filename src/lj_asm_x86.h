@@ -807,13 +807,17 @@ static void asm_strto(ASMState *as, IRIns *ir)
 static void asm_tohandle(ASMState *as, IRIns *ir)
 {
   Reg dest = ra_dest(as, ir, RSET_GPR) | REX_GC64;
-  as->mrm.base = dest;
-  as->mrm.idx = RID_NONE;
-  as->mrm.ofs = 0;
-  as->mrm.scale = XM_SCALE1;
-  emit_mrm(as, XO_MOV, dest, RID_MRM);
-  asm_tvptr(as, dest, ir->op1);
+  // as->mrm.base = dest;
+  // as->mrm.idx = RID_NONE;
+  // as->mrm.ofs = 0;
+  // as->mrm.scale = XM_SCALE1;
+  // emit_mrm(as, XO_MOV, dest, RID_MRM);
+  Reg src = ra_alloc1(as, ir->op1, rset_exclude(RSET_GPR, dest));
+  Reg tmp = ra_scratch(as, rset_exclude(rset_exclude(RSET_GPR, dest), src));
 
+  emit_rr(as, XO_OR, dest, tmp);
+  emit_loadu64(as, tmp, (uint64_t)IRT_LIGHTUD << 47);
+  emit_rr(as, XO_MOV, dest, src);
 }
 
 /* -- Memory references --------------------------------------------------- */

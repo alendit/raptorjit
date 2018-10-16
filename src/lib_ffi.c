@@ -676,11 +676,10 @@ LJLIB_CF(ffi_errno)	LJLIB_REC(.)
 
 LJLIB_CF(ffi_new_handle) LJLIB_REC(.)
 {
-  CTState *cts = ctype_cts(L);
   TValue *o = lj_lib_checkany(L, 1);
-  GCcdata *cd = lj_cdata_new(cts, CTID_UINT64, CTSIZE_PTR);
-  *(uint64_t*)cdataptr(cd) = *(uint64_t*)(o);
-  setcdataV(L, o, cd);
+  lua_assert(tvistab(o));
+  void* gcptr = gcval(o);
+  setlightudV(o, gcptr);
   return 1;
 }
 
@@ -688,10 +687,16 @@ LJLIB_CF(ffi_from_handle) LJLIB_REC(.)
 {
   CTState *cts = ctype_cts(L);
   TValue *o = lj_lib_checkany(L, 1);
-  TValue unwrapped;
-  lj_cconv_ct_tv(cts, ctype_get(cts, CTID_UINT64), (uint8_t*)&unwrapped, o,
+  if (tviscdata(o)) {
+    uint64_t unwrapped;
+    lj_cconv_ct_tv(cts, ctype_get(cts, CTID_UINT64), (uint8_t*)&unwrapped, o,
       CCF_ARG(1));
-  *o = unwrapped;
+
+    o->u64 = (uint64_t)LJ_TTAB << 47 | unwrapped;
+  } else {
+    GCobj* gcptr = lightudV(o);
+    o->u64 = (uint64_t)LJ_TTAB << 47 | (uint64_t)gcptr;
+  }
 
   return 1;
 }
